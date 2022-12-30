@@ -1,4 +1,4 @@
-using OpenRGB.NET;
+﻿using OpenRGB.NET;
 using OpenRGB.NET.Models;
 using  System.Linq;
 
@@ -23,12 +23,12 @@ async Task ManageLedsAsync() {
     const int updateTimeMs = 100;
 
 
-var rainbow = Color.GetHueRainbow(cycleTimeMs / updateTimeMs).ToArray();
+    var spectrum = Color.GetSinRainbow(cycleTimeMs / updateTimeMs, 130, 125, 1, 0).ToArray();
     var c = 0;
 
     while (true) {
-    c = (c + 1) % rainbow.Length;
-    var nextColour = rainbow[c];
+        c = (c + 1) % spectrum.Length;
+        var nextColour = spectrum[c];
 
         for (int i = 0; i < devices.Length; i++) {
             var device = devices[i];
