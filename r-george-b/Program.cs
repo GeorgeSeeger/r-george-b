@@ -1,15 +1,14 @@
-﻿using OpenRGB.NET;
-using OpenRGB.NET.Models;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
+using OpenRGB.NET;
+using OpenRGB.NET.Models;
 namespace RGeorgeB {
     public class Program {
         public static async Task Main(string[] args) {
             for (var i = 4; i >= 0; i--) {
                 try {
                     await ManageLedsAsync();
-                }
-                catch {
+                } catch {
                     if (i == 0) throw;
                     await Task.Delay(10_000);
                 }
@@ -20,7 +19,7 @@ namespace RGeorgeB {
                 var strategy = new RgbStrategyFactory().Get();
                 var deviceCount = client.GetControllerCount();
                 var devices = client.GetAllControllerData();
-                
+
                 while (true) {
                     strategy.UpdateDevices(client, devices);
                     await Task.Delay(strategy.MillisecondsToNextUpdate());

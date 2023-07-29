@@ -31,13 +31,11 @@ namespace RGeorgeB {
                     .ToArray();
                 if (!IsKeyboard(device)) {
                     client.UpdateLeds(i, leds);
-                }
-                else {
+                } else {
                     var keyboardLeds = device.Colors.Select((c, i) => shouldUpdateLedOnKeyboard(i) ? nextColour : c).ToArray();
                     client.UpdateLeds(i, keyboardLeds);
                 }
             }
         }
     }
-
 }

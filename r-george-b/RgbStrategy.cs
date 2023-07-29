@@ -6,7 +6,7 @@ namespace RGeorgeB {
     public abstract class RgbStrategy : IRgbStrategy {
         public abstract int MillisecondsToNextUpdate();
         public abstract void UpdateDevices(OpenRGBClient client, Device[] devices);
-        
+
         protected bool IsGpu(Device device) => device.Type == OpenRGB.NET.Enums.DeviceType.Gpu;
 
         protected bool IsKeyboard(Device device) => device.Type == OpenRGB.NET.Enums.DeviceType.Keyboard;
@@ -21,7 +21,7 @@ namespace RGeorgeB {
                             .Select(t => t.i)
                             .ToHashSet();
             return keyIndexes.Contains;
-        } 
+        }
 
         private static HashSet<string> NamedKeys = new HashSet<string> {
             "Key: Print Screen",
