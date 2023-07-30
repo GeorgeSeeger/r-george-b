@@ -3,13 +3,16 @@ using OpenRGB.NET.Models;
 
 namespace RGeorgeB {
     public class SlowUniformWave : RgbStrategy {
-        public Color[] Spectrum = Color.GetHueRainbow(12000).ToArray();
+        protected const int CycleTimeMs = 600_000;
+
+        protected Color[] Spectrum = Color.GetHueRainbow(CycleTimeMs / 500).ToArray();
+
         public override int MillisecondsToNextUpdate() => 500;
 
-        private int counter = 0;
+        protected int counter = 0;
+
         public override void UpdateDevices(OpenRGBClient client, Device[] devices) {
-            this.counter = (this.counter + 1) % Spectrum.Length;
-            var nextColour = Spectrum[this.counter];
+            var nextColour = GetNextColour();
 
             var gpuDevice = devices.IndexOf(IsGpu);
             var directMode = 0;
@@ -36,6 +39,11 @@ namespace RGeorgeB {
                     client.UpdateLeds(i, keyboardLeds);
                 }
             }
+        }
+
+        protected virtual Color GetNextColour() {
+            this.counter = (this.counter + 1) % Spectrum.Length;
+            return Spectrum[this.counter];
         }
     }
 }

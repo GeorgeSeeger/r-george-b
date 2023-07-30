@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
-using OpenRGB.NET;
-using OpenRGB.NET.Models;
+﻿using OpenRGB.NET;
+
 namespace RGeorgeB {
     public class Program {
         public static async Task Main(string[] args) {
@@ -25,15 +23,6 @@ namespace RGeorgeB {
                     await Task.Delay(strategy.MillisecondsToNextUpdate());
                 }
             }
-        }
-    }
-    public static class EnumerableExtensions {
-        public static int IndexOf<T>(this T[] array, Func<T, bool> predicate) {
-            for (var i = 0; i < array.Length; i++) {
-                if (predicate(array[i])) return i;
-            }
-
-            return -1;
         }
     }
 }
