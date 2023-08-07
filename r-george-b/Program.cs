@@ -20,12 +20,14 @@ namespace RGeorgeB {
                 var strategy = new RgbStrategyFactory().Get(args);
                 var devices = client.GetAllControllerData();
                 var now = System.DateTime.UtcNow;
+                var threeMinutes = TimeSpan.FromMinutes(3);
                 
                 while (true) {
                     strategy.UpdateDevices(client, devices);
                     await Task.Delay(strategy.MillisecondsToNextUpdate());
 
-                    if (DateTime.UtcNow.Subtract(now) > TimeSpan.FromMinutes(3)) {
+                    if (DateTime.UtcNow.Subtract(now) > threeMinutes) {
+                        now = DateTime.UtcNow;
                         devices = UpdateDevices(client);
                     }
                 }

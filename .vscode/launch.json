@@ -10,8 +10,8 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/r-george-b/bin/Debug/net7.0/r-george-b.dll",
-            "args": ["day20"],
-            "cwd": "${workspaceFolder}",
+            "args": [ "UnicornVomit" ],
+            "cwd": "${workspaceFolder}/r-george-b/",
             "console": "internalConsole",
             "stopAtEntry": false
         },
