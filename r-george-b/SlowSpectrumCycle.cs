@@ -2,7 +2,7 @@ using OpenRGB.NET;
 using OpenRGB.NET.Models;
 
 namespace RGeorgeB {
-    public class SlowUniformWave : RgbStrategy {
+    public class SlowSpectrumCycle : RgbStrategy {
         protected const int CycleTimeMs = 600_000;
 
         protected Color[] Spectrum = Color.GetHueRainbow(CycleTimeMs / 500).ToArray();

@@ -1,10 +1,10 @@
 using OpenRGB.NET.Models;
 
 namespace RGeorgeB {
-    public class ReversingSlowUniformWave : SlowUniformWave {
+    public class ReversingSpectrumCycle : SlowSpectrumCycle {
         private Random random = new Random();
 
-        public ReversingSlowUniformWave() {
+        public ReversingSpectrumCycle() {
             this.Spectrum = Color.GetHueRainbow(300_000 / 500).ToArray();
             this.counter = this.random.Next(this.Spectrum.Length);
         }
