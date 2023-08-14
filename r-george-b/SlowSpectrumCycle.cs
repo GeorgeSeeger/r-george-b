@@ -15,12 +15,6 @@ namespace RGeorgeB {
             var nextColour = GetNextColour();
 
             var gpuDevice = devices.IndexOf(IsGpu);
-            var directMode = 0;
-            if (devices.Any(IsGpu)) {
-                var gpu = devices[gpuDevice];
-                directMode = ((Mode[])gpu.Modes).IndexOf(m => m.Name == "Direct");
-                client.SetMode(gpuDevice, directMode);
-            }
 
             Func<int, bool> shouldUpdateLedOnKeyboard = _ => true;
             if (devices.Any(IsKeyboard)) {
@@ -29,6 +23,12 @@ namespace RGeorgeB {
 
             for (int i = 0; i < devices.Length; i++) {
                 var device = devices[i];
+
+                if (!device.ActiveMode.Name.Contains("Direct")) {
+                    var directMode = device.Modes.IndexOf(m => m.Name == "Direct");
+                    client.SetMode(i, directMode);
+                }
+                
                 var leds = Enumerable.Range(0, device.Colors.Length)
                     .Select(_ => nextColour)
                     .ToArray();

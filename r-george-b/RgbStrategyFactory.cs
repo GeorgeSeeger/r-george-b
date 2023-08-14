@@ -11,7 +11,7 @@ namespace RGeorgeB {
                 strategy = strategies.Single(s => s.Name == args?.First());
             }
             
-            return (IRgbStrategy)(Activator.CreateInstance(strategy ?? throw new Exception()));
+            return (IRgbStrategy)(Activator.CreateInstance(strategy) ?? throw new Exception());
         }
     }
 
