@@ -20,6 +20,10 @@ public class Program {
             var stream = tcp.GetStream();
             await stream.WriteAsync(data, 0, data.Length);
 
+            data = new byte[256];
+            var responseLen = await stream.ReadAsync(data, 0, data.Length);
+            var response = Encoding.UTF8.GetString(data, 0, responseLen);
+            Console.WriteLine(response);
         } catch (SocketException e) {
             Console.WriteLine($"SocketException: {e}");
         }

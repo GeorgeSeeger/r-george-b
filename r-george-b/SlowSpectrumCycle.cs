@@ -11,6 +11,8 @@ namespace RGeorgeB {
 
         protected int counter = 0;
 
+        protected HashSet<int> UpdatedDevices = new HashSet<int>();
+
         public override void UpdateDevices(OpenRGBClient client, Device[] devices) {
             var nextColour = GetNextColour();
 
@@ -24,9 +26,11 @@ namespace RGeorgeB {
             for (int i = 0; i < devices.Length; i++) {
                 var device = devices[i];
 
-                if (!device.ActiveMode.Name.Contains("Direct")) {
+                if (!device.ActiveMode.Name.Contains("Direct")
+                    && !UpdatedDevices.Contains(i)) {
                     var directMode = device.Modes.IndexOf(m => m.Name == "Direct");
                     client.SetMode(i, directMode);
+                    UpdatedDevices.Add(i);
                 }
                 
                 var leds = Enumerable.Range(0, device.Colors.Length)
