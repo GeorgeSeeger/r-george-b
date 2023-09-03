@@ -4,6 +4,8 @@ namespace RGeorgeB {
 
 
     public abstract class RgbStrategy : IRgbStrategy {
+        public static bool IsRandomlySelectable() => true;
+
         public abstract int MillisecondsToNextUpdate();
         public abstract void UpdateDevices(OpenRGBClient client, Device[] devices);
 

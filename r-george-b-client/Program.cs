@@ -28,7 +28,7 @@ public class Program {
             Console.WriteLine($"SocketException: {e}");
         }
 
-        Console.WriteLine("\n Press any key to exit");
+        Console.WriteLine("Press any key to exit");
         Console.Read();
     }
 

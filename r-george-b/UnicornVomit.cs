@@ -5,9 +5,9 @@ using RGeorgeB;
 
 public class UnicornVomit : RgbStrategy {
 
-    public override int MillisecondsToNextUpdate() => 150;
+    public override int MillisecondsToNextUpdate() => 100;
 
-    private const int SpiralHueDensity = 360;
+    private const int SpiralHueDensity = 180;
 
     private const int NumpadCycleTimeMs = 8_000;
 
@@ -62,8 +62,10 @@ public class UnicornVomit : RgbStrategy {
     private Color GetRainbowSpiralFor(Device keyboard, int i, int spectrumShift) {
         if (NumpadArrowsAndControl.TryGetValue(keyboard.Leds[i].Name, out var position)) {
             var (y, x) = position;
-            var angle = (int)Math.Round(Math.Atan(y / x) * (180 / Math.PI));
-            var offset = (x < 0) ? 270 : 90;
+            var angle = (int)Math.Round(Math.Atan(y / x) * (SpiralHueDensity / (2 * Math.PI)));
+            var offset = (x < 0) 
+                ? 3 * SpiralHueDensity / 4 
+                : SpiralHueDensity / 4;
             var spectrumIndex = spectrumShift + offset + angle;
             return spectrum[spectrumIndex % spectrum.Length];
         }

@@ -2,7 +2,7 @@ using OpenRGB.NET.Models;
 
 namespace RGeorgeB {
     public class ReversingSpectrumCycle : SlowSpectrumCycle {
-        private Random random = new Random();
+        private System.Random random = new System.Random();
 
         public ReversingSpectrumCycle() {
             this.Spectrum = Color.GetHueRainbow(300_000 / 500).ToArray();
