@@ -1,5 +1,7 @@
 # R-George-B
 
+![Rainbow spiral on the numpad](./Content/keyboard.gif)
+
 I wrote a little .Net CLI to control the RGB LEDs on my gaming PC. I use the [OpenRGB.NET](https://github.com/diogotr7/OpenRGB.NET/) client to control (via TCP, as it turns out) [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB/).
 
 The existing RGB software ecosystem is bad. Most RGB control programs only support the same devices that the manufacturer made, and many are achingly slow, bloated and awful on top of that (looking at you MSI Center - the most egregious in a bad field - but special mentions to Asus Armory Crate and Corsair's iCue).
