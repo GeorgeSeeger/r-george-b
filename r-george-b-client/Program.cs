@@ -9,27 +9,30 @@ public class Program {
         try {
             using var tcp = new TcpClient();
             await tcp.ConnectAsync("127.0.0.1", port);
-
+            
             var message = string.Join(' ', args);
-            if (string.IsNullOrWhiteSpace(message)) {
-                message = EmptyMessage();
-            }
+            do {
+                if (string.IsNullOrWhiteSpace(message)) {
+                    message = EmptyMessage();
+                }
 
-            var data = Encoding.UTF8.GetBytes(message);
+                var data = Encoding.UTF8.GetBytes(message);
 
-            var stream = tcp.GetStream();
-            await stream.WriteAsync(data, 0, data.Length);
+                var stream = tcp.GetStream();
+                await stream.WriteAsync(data, 0, data.Length);
 
-            data = new byte[256];
-            var responseLen = await stream.ReadAsync(data, 0, data.Length);
-            var response = Encoding.UTF8.GetString(data, 0, responseLen);
-            Console.WriteLine(response);
+                data = new byte[256];
+                var responseLen = await stream.ReadAsync(data, 0, data.Length);
+                var response = Encoding.UTF8.GetString(data, 0, responseLen);
+                Console.WriteLine(response);
+
+                Console.WriteLine("Press enter to exit, or retype your command");
+                message = Console.ReadLine();
+            } while (!string.IsNullOrWhiteSpace(message));
         } catch (SocketException e) {
             Console.WriteLine($"SocketException: {e}");
         }
 
-        Console.WriteLine("Press any key to exit");
-        Console.Read();
     }
 
     private static string EmptyMessage() {
