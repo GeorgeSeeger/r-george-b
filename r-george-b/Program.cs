@@ -51,10 +51,16 @@ namespace RGeorgeB {
                 var i = 0;
                 while((i = stream.Read(bytes, 0, bytes.Length)) != 0) {
                     var newArgs = System.Text.Encoding.UTF8.GetString(bytes, 0, i).Split(' ');
-                    var possible = RgbStrategySelector.Search(newArgs.FirstOrDefault());
+                    string? arg = newArgs.FirstOrDefault();
+                    if (string.Equals(arg, "exit", StringComparison.OrdinalIgnoreCase)) {
+                         cancellationTokenSource.Cancel();
+                         return Task.CompletedTask;
+                    }
+
+                    var possible = RgbStrategySelector.Search(arg);
                     var reply = "";
                     if (possible.strategy != null) {
-                        reply = $"Switching to {possible.Item1.Name}\n";
+                        reply = $"Switching to {possible.strategy.Name}\n";
                     } else if (possible.closeMatches?.Any() ?? false) {
                         reply = "Did you mean: \n\n" + string.Join(",\n", possible.closeMatches) + "\n";
                     } else if (possible.closeMatches != null) {
@@ -65,7 +71,7 @@ namespace RGeorgeB {
                     byte[] msg = System.Text.Encoding.UTF8.GetBytes(reply);
                     stream.Write(msg, 0, msg.Length);
 
-                    if (possible.Item1 != null) {
+                    if (possible.strategy != null) {
                         cancellationTokenSource.Cancel();
                         cancellationTokenSource = new CancellationTokenSource();
                         new Thread(new ParameterizedThreadStart(async (obj) => await RgbControl(obj))).Start((args: newArgs, cancellationToken: cancellationTokenSource.Token));
