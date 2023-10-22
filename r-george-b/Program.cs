@@ -31,8 +31,12 @@ namespace RGeorgeB {
             for (var i = 4; i >= 0; i--) {
                 try {
                     await ManageLedsAsync(args, token);
-                } catch {
-                    if (i == 0) throw;
+                } 
+                catch (InvalidOperationException) {
+                    throw; // this we want to see
+                }
+                catch {
+                    if (i == 0) throw; // maybe OpenRGB hasn't started yet, so we can retry a few times
                     await Task.Delay(10_000);
                 }
             }
