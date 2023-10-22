@@ -11,7 +11,7 @@ namespace RGeorgeB {
 
         protected int counter = 0;
 
-        protected HashSet<int> UpdatedDevices = new HashSet<int>();
+        protected HashSet<int> UpdatedDevices = new();
 
         public override void UpdateDevices(OpenRGBClient client, Device[] devices) {
             var nextColour = GetNextColour();

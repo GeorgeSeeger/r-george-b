@@ -21,7 +21,7 @@ namespace RGeorgeB {
 
         private static async Task RgbControl(object? obj) {
             if (obj is not (string[] args, CancellationToken token)) {
-                throw new ArgumentException();
+                throw new ArgumentException( "Unexpected argument type", nameof(obj));
             }
 
             await RgbControl(args, token);
@@ -37,13 +37,13 @@ namespace RGeorgeB {
                 }
                 catch {
                     if (i == 0) throw; // maybe OpenRGB hasn't started yet, so we can retry a few times
-                    await Task.Delay(10_000);
+                    await Task.Delay(10_000, token);
                 }
             }
         }
 
         public static Task TcpServer(CancellationTokenSource? cancellationTokenSource) {
-            if (cancellationTokenSource == null) { throw new ArgumentNullException(); }
+            if (cancellationTokenSource == null) { throw new ArgumentNullException(nameof(cancellationTokenSource)); }
 
             var server = new TcpListener(IPAddress.Parse("127.0.0.1"), 13000);
             server.Start();
@@ -61,13 +61,13 @@ namespace RGeorgeB {
                          return Task.CompletedTask;
                     }
 
-                    var possible = RgbStrategySelector.Search(arg);
+                    var (strategy, closeMatches) = RgbStrategySelector.Search(arg);
                     var reply = "";
-                    if (possible.strategy != null) {
-                        reply = $"Switching to {possible.strategy.Name}\n";
-                    } else if (possible.closeMatches?.Any() ?? false) {
-                        reply = "Did you mean: \n\n" + string.Join(",\n", possible.closeMatches) + "\n";
-                    } else if (possible.closeMatches != null) {
+                    if (strategy != null) {
+                        reply = $"Switching to {strategy.Name}\n";
+                    } else if (closeMatches?.Any() ?? false) {
+                        reply = "Did you mean: \n\n" + string.Join(",\n", closeMatches) + "\n";
+                    } else if (closeMatches != null) {
                         reply = $"No operations found for {newArgs.FirstOrDefault()}";
                     } else {
                         reply = "I don't undertstand";
@@ -75,7 +75,7 @@ namespace RGeorgeB {
                     byte[] msg = System.Text.Encoding.UTF8.GetBytes(reply);
                     stream.Write(msg, 0, msg.Length);
 
-                    if (possible.strategy != null) {
+                    if (strategy != null) {
                         cancellationTokenSource.Cancel();
                         cancellationTokenSource = new CancellationTokenSource();
                         new Thread(new ParameterizedThreadStart(async (obj) => await RgbControl(obj))).Start((args: newArgs, cancellationToken: cancellationTokenSource.Token));
@@ -93,15 +93,15 @@ namespace RGeorgeB {
             
             while (!cancellationToken.IsCancellationRequested) {
                 strategy.UpdateDevices(client, devices);
-                await Task.Delay(strategy.MillisecondsToNextUpdate());
+                await Task.Delay(strategy.MillisecondsToNextUpdate(), cancellationToken);
 
                 if (DateTime.UtcNow.Subtract(now) > threeMinutes) {
                     now = DateTime.UtcNow;
-                    devices = UpdateDevices(client);
+                    devices = UpdateDevices();
                 }
             }
 
-            Device[] UpdateDevices(OpenRGBClient client) {
+            Device[] UpdateDevices() {
                 return client.GetAllControllerData();
             }
         }
