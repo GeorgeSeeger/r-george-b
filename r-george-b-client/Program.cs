@@ -30,9 +30,24 @@ public class Program {
                 message = Console.ReadLine();
             } while (!string.IsNullOrWhiteSpace(message));
         } catch (SocketException e) {
+            if (e.ErrorCode == 10061) { 
+                // actively refused connection, RGeorgeB likely not running. 
+                Console.WriteLine("R-George-B isn't running. Would you like to start it? [y/n]");
+                if (string.Equals(Console.ReadLine(), "y", StringComparison.OrdinalIgnoreCase)) {
+                    StartNewRgbClient();
+                }
+                return;
+            } 
+            
             Console.WriteLine($"SocketException: {e}");
         }
 
+    }
+
+    private static void StartNewRgbClient() {
+        // todo this
+        Console.WriteLine($"We are at {Directory.GetCurrentDirectory()}");
+        throw new NotImplementedException();
     }
 
     private static string EmptyMessage() {
