@@ -1,5 +1,5 @@
-﻿using System.Net.Sockets;
-using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Net.Sockets;
 using System.Text;
 
 public class Program {
@@ -46,8 +46,11 @@ public class Program {
 
     private static void StartNewRgbClient() {
         // todo this
-        Console.WriteLine($"We are at {Directory.GetCurrentDirectory()}");
-        throw new NotImplementedException();
+        var rgbProgram = Process.Start("../r-george-b/bin/Release/net7.0/r-george-b.exe");
+        rgbProgram.Start();
+        if (rgbProgram.HasExited) {
+            throw new InvalidOperationException("It's exited already, strage...");
+        }
     }
 
     private static string EmptyMessage() {
