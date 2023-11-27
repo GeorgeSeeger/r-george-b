@@ -25,7 +25,7 @@ namespace RGeorgeB {
             return keyIndexes.Contains;
         }
 
-        private static HashSet<string> NamedKeys = new HashSet<string> {
+        private static readonly HashSet<string> NamedKeys = new() {
             "Key: Print Screen",
             "Key: Scroll Lock",
             "Key: Num Lock",

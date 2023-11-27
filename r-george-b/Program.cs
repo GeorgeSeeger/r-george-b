@@ -92,12 +92,16 @@ namespace RGeorgeB {
             var threeMinutes = TimeSpan.FromMinutes(3);
             
             while (!cancellationToken.IsCancellationRequested) {
-                strategy.UpdateDevices(client, devices);
-                await Task.Delay(strategy.MillisecondsToNextUpdate(), cancellationToken);
+                try {
+                    strategy.UpdateDevices(client, devices);
+                    await Task.Delay(strategy.MillisecondsToNextUpdate(), cancellationToken);
 
-                if (DateTime.UtcNow.Subtract(now) > threeMinutes) {
-                    now = DateTime.UtcNow;
-                    devices = UpdateDevices();
+                    if (DateTime.UtcNow.Subtract(now) > threeMinutes) {
+                        now = DateTime.UtcNow;
+                        devices = UpdateDevices();
+                    }
+                } catch (TaskCanceledException) {
+                    // that's fine, we did that
                 }
             }
 
@@ -105,6 +109,5 @@ namespace RGeorgeB {
                 return client.GetAllControllerData();
             }
         }
-
     }
 }

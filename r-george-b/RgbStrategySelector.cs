@@ -8,7 +8,7 @@ namespace RGeorgeB
             if (args == null || !args.Any()) return new Random();
 
             var arg = args.First();
-            var (strategy, closeMatches) = Search(arg);
+            var (strategy, _) = Search(arg);
             if (strategy == null) { throw new InvalidOperationException(); }
 
             return (IRgbStrategy)(Activator.CreateInstance(strategy) ?? throw new Exception());
