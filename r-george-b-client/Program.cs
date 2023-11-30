@@ -48,7 +48,7 @@
 
         private static void StartNewRgbClient() {
             // todo this
-            var rgbProgram = Process.Start("../r-george-b/bin/Release/net7.0/r-george-b.exe");
+            var rgbProgram = Process.Start(@"%USERPROFILE%\Documents\repos\r-george-b\r-george-b\bin\Release\net7.0\r-george-b.exe");
             rgbProgram.Start();
             if (rgbProgram.HasExited) {
                 throw new InvalidOperationException("It's exited already, strage...");

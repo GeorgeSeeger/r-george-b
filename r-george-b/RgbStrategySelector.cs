@@ -11,7 +11,7 @@ namespace RGeorgeB
             var (strategy, _) = Search(arg);
             if (strategy == null) { throw new InvalidOperationException(); }
 
-            return (IRgbStrategy)(Activator.CreateInstance(strategy) ?? throw new Exception());
+            return (IRgbStrategy)(Activator.CreateInstance(strategy, args.Skip(1).ToArray()) ?? throw new Exception());
         }
 
         public static (Type? strategy, string[]? closeMatches) Search(string? arg) {
