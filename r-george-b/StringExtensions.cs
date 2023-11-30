@@ -1,4 +1,26 @@
-public static class StringExtensions {
+using System.Text.RegularExpressions;
+using OpenRGB.NET.Models;
+
+public static partial class StringExtensions {
+    public static Color FromHexString(this string s) {
+        if (!ColourHexString().IsMatch(s)) {
+            throw new ArgumentException($"{s} is not a hex string");
+        }
+
+        var str = s.ToLower().TrimStart('#');
+        if (str.Length == 6) {
+            return new Color(Convert.ToByte(str.Substring(0, 2), 16),
+            Convert.ToByte(str.Substring(2, 2), 16),
+            Convert.ToByte(str.Substring(4, 2), 16)
+            );
+        }
+
+        return new Color(
+            Convert.ToByte(Convert.ToByte(str.Substring(0, 1), 16) << 4),
+            Convert.ToByte(Convert.ToByte(str.Substring(1, 1), 16) << 4), 
+            Convert.ToByte(Convert.ToByte(str.Substring(2, 1), 16) << 4));
+    } 
+
     public static int LevensteinDistance(this string s, string t) {
         // https://stackoverflow.com/questions/13793560/find-closest-match-to-input-string-in-a-list-of-strings
 
@@ -24,7 +46,7 @@ public static class StringExtensions {
         for (var i = 1; i <= n; i++) {
             for (var j = 1; j <= m; j++) {
                 // Compute cost.
-                var cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+                var cost = t[j - 1] == s[i - 1] ? 0 : 1;
                 d[i, j] = Math.Min(Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
                 d[i - 1, j - 1] + cost);
             }
@@ -32,4 +54,7 @@ public static class StringExtensions {
         // Return cost.
         return d[n, m];
     }
+
+    [GeneratedRegex("#?(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})")]
+    private static partial Regex ColourHexString();
 }

@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/r-george-b/bin/Debug/net7.0/r-george-b.dll",
-            "args": [ "DaylightSpectrum" ],
+            "args": [ "Fixed", "#ff8200" ],
             "cwd": "${workspaceFolder}/r-george-b/",
             "console": "internalConsole",
             "stopAtEntry": false
