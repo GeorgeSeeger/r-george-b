@@ -2,24 +2,32 @@ using System.Text.RegularExpressions;
 using OpenRGB.NET.Models;
 
 public static partial class StringExtensions {
-    public static Color FromHexString(this string s) {
+
+    public static bool TryParseFromHexString(this string s, out Color? color) {
+        color = null;
         if (!ColourHexString().IsMatch(s)) {
-            throw new ArgumentException($"{s} is not a hex string");
+            return false;
         }
 
         var str = s.ToLower().TrimStart('#');
         if (str.Length == 6) {
-            return new Color(Convert.ToByte(str.Substring(0, 2), 16),
+            color = new Color(Convert.ToByte(str.Substring(0, 2), 16),
             Convert.ToByte(str.Substring(2, 2), 16),
             Convert.ToByte(str.Substring(4, 2), 16)
             );
+            return true;
         }
-
-        return new Color(
+        
+        if (str.Length == 3) {
+        color = new Color(
             Convert.ToByte(Convert.ToByte(str.Substring(0, 1), 16) << 4),
             Convert.ToByte(Convert.ToByte(str.Substring(1, 1), 16) << 4), 
             Convert.ToByte(Convert.ToByte(str.Substring(2, 1), 16) << 4));
-    } 
+            return true;
+        }
+
+        return false;
+    }
 
     public static int LevensteinDistance(this string s, string t) {
         // https://stackoverflow.com/questions/13793560/find-closest-match-to-input-string-in-a-list-of-strings
