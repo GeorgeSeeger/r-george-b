@@ -6,14 +6,14 @@ namespace RGeorgeB
     using OpenRGB.NET.Models;
 
     public class Random : IRgbStrategy {
-        private System.Random random = new();
+        private readonly System.Random random = new();
 
         public static bool IsRandomlySelectable() => false;
 
-        private IRgbStrategy actualStrategy;
+        private readonly IRgbStrategy actualStrategy;
 
         public Random() {
-            var strategies = typeof(RgbStrategySelector).Assembly.GetTypes()
+            var selectableStrategies = typeof(RgbStrategySelector).Assembly.GetTypes()
             .Where(t => {
                 return t.IsAssignableTo(typeof(IRgbStrategy))
                                 && !t.IsAbstract
@@ -22,7 +22,7 @@ namespace RGeorgeB
             })
             .ToArray();
 
-            var strategy = strategies.Where(s => s.Name != nameof(Off)).ToArray()[random.Next(strategies.Length - 1)];
+            var strategy = selectableStrategies.ToArray()[random.Next(selectableStrategies.Length)];
             
             this.actualStrategy = (IRgbStrategy)(Activator.CreateInstance(strategy) ?? throw new Exception());
         }
