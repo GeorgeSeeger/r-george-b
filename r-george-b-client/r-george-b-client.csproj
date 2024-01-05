@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
-  <None Update="appsettings.user.json" CopyToOutputDirectory="PreserveNewest" />
-</ItemGroup>
+    <None Update="appsettings.user.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>

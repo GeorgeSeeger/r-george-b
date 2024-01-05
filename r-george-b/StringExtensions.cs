@@ -19,10 +19,13 @@ public static partial class StringExtensions {
         }
         
         if (str.Length == 3) {
-        color = new Color(
-            Convert.ToByte(Convert.ToByte(str.Substring(0, 1), 16) << 4),
-            Convert.ToByte(Convert.ToByte(str.Substring(1, 1), 16) << 4), 
-            Convert.ToByte(Convert.ToByte(str.Substring(2, 1), 16) << 4));
+            var r = Convert.ToByte(str[0..1], 16);
+            var g = Convert.ToByte(str[1..2], 16);
+            var b = Convert.ToByte(str[2..3], 16);
+            color = new Color(
+                Convert.ToByte((r << 4) + r),
+                Convert.ToByte((g << 4) + g),
+                Convert.ToByte((b << 4) + b));
             return true;
         }
 
