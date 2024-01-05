@@ -1,2 +1,6 @@
+# dotnet build stuff
 **/bin/**
 **/obj/**
+
+# user settings
+**/appsettings.user.json

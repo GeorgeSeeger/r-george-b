@@ -3,9 +3,22 @@
     using System.Diagnostics;
     using System.Net.Sockets;
     using System.Text;
+    using Microsoft.Extensions.Configuration;
 
     public class Program {
         const int port = 13000;
+
+        private static IConfigurationRoot _config;
+
+        private static IConfiguration Config {
+            get {
+                if (_config != null) return _config;
+                    _config = new ConfigurationBuilder()
+                        .AddJsonFile("appsettings.user.json", optional: false)
+                        .Build();
+                return _config;
+            }
+        }
 
         public static async Task Main(string[] args) {
             try {
@@ -38,7 +51,8 @@
                     if (string.Equals(Console.ReadLine(), "y", StringComparison.OrdinalIgnoreCase)) {
                         StartNewRgbClient();
                     }
-                    return;
+                    
+                    await Main(args);
                 }
 
                 Console.WriteLine($"SocketException: {e}");
@@ -47,11 +61,18 @@
         }
 
         private static void StartNewRgbClient() {
-            // todo this
-            var rgbProgram = Process.Start(@"%USERPROFILE%\Documents\repos\r-george-b\r-george-b\bin\Release\net7.0\r-george-b.exe");
-            rgbProgram.Start();
-            if (rgbProgram.HasExited) {
-                throw new InvalidOperationException("It's exited already, strage...");
+            var rgbExeLocation = Config.GetSection("r-george-b-location").Value;
+            if (string.IsNullOrWhiteSpace(rgbExeLocation) || !File.Exists(rgbExeLocation)) {
+                throw new InvalidOperationException($"Cannot find file at \"{rgbExeLocation}\".");
+            }
+
+            var rgbProgram = Process.Start(new ProcessStartInfo {
+                FileName = rgbExeLocation,
+                CreateNoWindow = true,
+            });
+            
+            if (rgbProgram == null || rgbProgram.HasExited) {
+                throw new InvalidOperationException("It's exited already, strange...");
             }
         }
 
